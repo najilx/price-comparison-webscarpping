@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Currency Converter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: linear-gradient(to top, #0ba360 0%, #3cba92 100%);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .converter-container {
+            max-width: 400px;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #666;
+            font-weight: bold;
+        }
+
+        input[type="number"], select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="number"]:focus, select:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+
+        #converted-price {
+            text-align: center;
+            font-size: 20px;
+            color: #007bff;
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #007bff;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        #converted-price:hover {
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="converter-container">
+        <h1>Currency Converter</h1>
+        <form id="currency-form">
+            <label for="original-price">Enter Original Price:</label>
+            <input type="number" id="original-price" step="0.01" min="0">
+            <label for="currency-select">Select Currency:</label>
+            <select id="currency-select">
+                <option value="USD">USD</option>
+                <option value="AED">AED</option>
+                <option value="QAR">Qatar Riyal</option>
+            </select>
+        </form>
+        <div id="converted-price"></div>
+    </div>
+
+    <script>
+        const exchangeRates = {
+            'USD': 83.37,
+            'AED': 22.70, 
+            'QAR': 22.90, 
+        };
+
+        function convertPriceToCurrency(price, currency) {
+            return price / exchangeRates[currency];
+        }
+
+        function updateConvertedPrice(price, currency) {
+            const priceElement = document.getElementById('converted-price');
+            const convertedPrice = convertPriceToCurrency(price, currency);
+            priceElement.innerText = `Converted Price: ${convertedPrice.toFixed(2)} ${currency}`;
+        }
+
+        document.getElementById('currency-select').addEventListener('change', function() {
+            const selectedCurrency = this.value;
+            const originalPrice = parseFloat(document.getElementById('original-price').value);
+            if (!isNaN(originalPrice)) {
+                updateConvertedPrice(originalPrice, selectedCurrency);
+            }
+        });
+
+        document.getElementById('original-price').addEventListener('input', function() {
+            const selectedCurrency = document.getElementById('currency-select').value;
+            const originalPrice = parseFloat(this.value);
+            if (!isNaN(originalPrice)) {
+                updateConvertedPrice(originalPrice, selectedCurrency);
+            }
+        });
+    </script>
+</body>
+</html>
